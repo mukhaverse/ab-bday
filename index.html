@@ -492,7 +492,7 @@
   <div class="s1-content">
     <p class="s1-eyebrow">May 13 · NASA APOD · Personal Archive</p>
     <h1 class="s1-title">
-      Happy birthday <br>
+      Happy birthday —<br>
       the cosmos prepared<br>
       <em>something for you.</em>
     </h1>
@@ -504,7 +504,7 @@
 <section class="scene" id="s2" data-scene="2">
   <div class="confetti-container" id="confetti"></div>
   <h2 class="s2-heading">Make a wish.</h2>
-  <p class="s2-sub">Blow into your phone. Or use the button.<br><span style="color:rgba(255,255,255,0.3);font-size:1rem;">no judgment.</span></p>
+  <p class="s2-sub">Blow into your phone. Or use the button.<br><span style="color:rgba(255,255,255,0.3);font-size:0.85em;">no judgment.</span></p>
 
   <div class="cake-wrap">
     <div class="cake-body">
@@ -560,6 +560,7 @@
     <div class="curtain-right" id="curtain-right"></div>
     <div class="reveal-frame"  id="reveal-frame"><div class="spinner"></div></div>
   </div>
+  <p class="s4-loading" id="s4-loading" style="font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);opacity:1;transition:opacity 0.4s ease;">fetching your image…</p>
   <div class="s4-info" id="s4-info">
     <span class="s4-tag"  id="s4-tag">—</span>
     <h3  class="s4-title" id="s4-title">Loading…</h3>
@@ -971,6 +972,8 @@ async function runReveal() {
     setTimeout(() => {
       document.getElementById("curtain-left").classList.add("open");
       document.getElementById("curtain-right").classList.add("open");
+      const loadingEl = document.getElementById("s4-loading");
+      if (loadingEl) loadingEl.style.opacity = "0";
     }, 350);
 
     document.getElementById("s4-tag").textContent   = bdayData.date;
@@ -1100,6 +1103,9 @@ async function renderTodayScene() {
   betterEl.style.opacity = "0";
   frame.innerHTML = '<div class="spinner"></div>';
 
+  // show frame wrap immediately so spinner is visible while typewriter runs
+  frameWrap.style.opacity = "1";
+
   // Step 1: typewriter the setup line
   const setupMsg = "not gonna lie, your actual birthday picture was kind of boring... so...";
   await typewriterInto(setupEl, setupMsg, 38);
@@ -1133,9 +1139,8 @@ async function renderTodayScene() {
       </p>`;
   }
 
-  // Step 3: fade in header + frame together
-  headerEl.style.opacity  = "1";
-  frameWrap.style.opacity = "1";
+  // Step 3: fade in header
+  headerEl.style.opacity = "1";
 
   // Step 4: "much better." appears after a moment
   setTimeout(() => { betterEl.style.opacity = "1"; }, 1400);
