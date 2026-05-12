@@ -65,6 +65,26 @@
       0%,100% { box-shadow: 0 0 0 0 rgba(202,180,55,0.4); }
       50%      { box-shadow: 0 0 0 14px rgba(202,180,55,0); }
     }
+    .back-arrow {
+      position: fixed;
+      bottom: 2.2rem; left: 2.2rem;
+      z-index: 9999;
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.15);
+      background: rgba(8,16,30,0.9);
+      color: rgba(255,255,255,0.4);
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+      font-family: sans-serif;
+    }
+    .back-arrow:hover { border-color: rgba(255,255,255,0.4); color: white; transform: scale(1.08); }
+    .back-arrow.visible { display: flex; }
 
     /* ════════ S1 — INTRO ════════ */
     #s1 {
@@ -267,9 +287,9 @@
       padding: 0.18rem 0.6rem; border-radius: 2px; display: none;
     }
     .laugh-text {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1rem, 2.5vw, 1.5rem); font-style: italic;
-      color: var(--star); opacity: 0; transition: opacity 0.7s ease; line-height: 1.65;
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(0.72rem, 1.8vw, 0.88rem); letter-spacing: 0.08em;
+      color: var(--muted); opacity: 0; transition: opacity 0.7s ease; line-height: 1.8;
     }
     .laugh-text.show { opacity: 1; }
 
@@ -361,7 +381,6 @@
     #s6 {
       flex-direction: column; align-items: center; justify-content: center;
       background: linear-gradient(180deg, #000 0%, #0a1220 100%);
-      padding: 3rem 2rem; gap: 1.6rem;
     }
     .s6-header { text-align: center; }
     .s6-pre {
@@ -387,6 +406,22 @@
       font-family: 'Playfair Display', serif; font-size: 0.98rem; color: white; text-align: center;
     }
     .s6-caption { font-size: 0.83rem; color: var(--muted); line-height: 1.8; text-align: center; }
+    .s6-inner {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 1.6rem; padding: 3rem 2rem; width: 100%;
+    }
+    .s6-setup {
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(0.78rem, 2vw, 1rem); letter-spacing: 0.06em;
+      color: var(--muted); text-align: center; min-height: 1.4em;
+      max-width: 420px; line-height: 1.8;
+    }
+    .s6-much-better {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.3rem, 3.5vw, 2rem); font-style: italic; font-weight: 700;
+      color: var(--star); margin-top: 0.4rem;
+      letter-spacing: -0.01em;
+    }
 
     /* ════════ S7 — NOTE ════════ */
     #s7 {
@@ -440,7 +475,8 @@
 
     @media (max-width: 480px) {
       .note-card { padding: 1.7rem 1.2rem; }
-      .nav-arrow { bottom: 1.3rem; right: 1.3rem; width: 46px; height: 46px; font-size: 1.1rem; }
+      .nav-arrow  { bottom: 1.3rem; right: 1.3rem; width: 46px; height: 46px; font-size: 1.1rem; }
+      .back-arrow { bottom: 1.3rem; left:  1.3rem; width: 46px; height: 46px; font-size: 1.1rem; }
       .s5-btns { flex-direction: column; align-items: center; }
     }
   </style>
@@ -448,6 +484,7 @@
 <body>
 
 <button class="nav-arrow" id="nav-arrow" aria-label="Next">&#8594;</button>
+<button class="back-arrow" id="back-arrow" aria-label="Back">&#8592;</button>
 
 <!-- ═══ S1 — INTRO ═══ -->
 <section class="scene active fade-in" id="s1" data-scene="1">
@@ -455,7 +492,7 @@
   <div class="s1-content">
     <p class="s1-eyebrow">May 13 · NASA APOD · Personal Archive</p>
     <h1 class="s1-title">
-      Happy birthday —<br>
+      Happy birthday <br>
       the cosmos prepared<br>
       <em>something for you.</em>
     </h1>
@@ -467,7 +504,7 @@
 <section class="scene" id="s2" data-scene="2">
   <div class="confetti-container" id="confetti"></div>
   <h2 class="s2-heading">Make a wish.</h2>
-  <p class="s2-sub">Blow into your phone. Or use the button — no judgment.</p>
+  <p class="s2-sub">Blow into your phone. Or use the button.<br><span style="color:rgba(255,255,255,0.3);font-size:1rem;">no judgment.</span></p>
 
   <div class="cake-wrap">
     <div class="cake-body">
@@ -508,10 +545,7 @@
   </div>
 
   <p class="laugh-text" id="laugh-text">
-    Relax, that's not your actual year.<br>
-    <span style="font-size:0.7em;color:var(--muted);font-style:normal;font-family:'DM Mono',monospace;letter-spacing:0.1em;">
-      NASA archives don't go back that far. Shocker.
-    </span>
+    NASA archives don't go back that far. Shocker.
   </p>
 </section>
 
@@ -519,7 +553,7 @@
 <section class="scene" id="s4" data-scene="4">
   <div class="s4-heading-block">
     <p class="s4-pre">May 13, 2002 · NASA APOD</p>
-    <h2 class="s4-big">This was your sky.</h2>
+    <h2 class="s4-big">Turns out the universe was busy with Mars that day.</h2>
   </div>
   <div class="curtain-wrap">
     <div class="curtain-left"  id="curtain-left"></div>
@@ -552,14 +586,18 @@
 
 <!-- ═══ S6 — TODAY ═══ -->
 <section class="scene" id="s6" data-scene="6">
-  <div class="s6-header">
-    <p class="s6-pre">Today · May 13, 2026</p>
-    <h2 class="s6-title">And this is your sky <em>today</em>.</h2>
-  </div>
-  <div class="s6-frame-wrap">
-    <div class="s6-frame" id="s6-frame"><div class="spinner"></div></div>
-    <p class="s6-apod-title" id="s6-apod-title"></p>
-    <p class="s6-caption">It kept going. So did you.</p>
+  <div class="s6-inner">
+    <p class="s6-setup" id="s6-setup"></p>
+    <div class="s6-header" id="s6-header" style="opacity:0;transition:opacity 0.7s ease;">
+      <p class="s6-pre">Today · May 13, 2026</p>
+      <h2 class="s6-title">This is your sky <em>today</em>.</h2>
+      <p class="s6-much-better" id="s6-much-better" style="opacity:0;transition:opacity 0.6s ease;">much better.</p>
+    </div>
+    <div class="s6-frame-wrap" id="s6-frame-wrap" style="opacity:0;transition:opacity 0.7s ease;">
+      <div class="s6-frame" id="s6-frame"><div class="spinner"></div></div>
+      <p class="s6-apod-title" id="s6-apod-title"></p>
+      <p class="s6-caption">It kept going. So did you.</p>
+    </div>
   </div>
 </section>
 
@@ -583,7 +621,7 @@
 ══════════════════════════════════════════════════ */
 const NASA_KEY  = "NOn1aJPhv7MbOkQu1zu46bY3RJqnZK89YGd77lYC";
 const PROXY     = "https://my-apod.onrender.com";
-const BDAY_DATE = "2002-05-14";
+const BDAY_DATE = "2002-05-13";
 const NAME      = "Aboud";
 
 // ↓ Edit the personal note here
@@ -601,6 +639,7 @@ let bdayData     = null;
 let todayData    = null;
 
 const arrowBtn = document.getElementById("nav-arrow");
+const backBtn  = document.getElementById("back-arrow");
 
 /* ══════════════════════════════════════════════════
    NAVIGATION
@@ -613,11 +652,18 @@ function showScene(n) {
   next.classList.add("fade-in");
   currentScene = n;
   hideArrow();
+  // back button: visible on all scenes except scene 1
+  if (n > 1) backBtn.classList.add("visible");
+  else        backBtn.classList.remove("visible");
   onSceneEnter(n);
 }
 
 arrowBtn.addEventListener("click", () => {
-  if (currentScene < 7) showScene(currentScene + 1);
+  if (currentScene < 6) showScene(currentScene + 1);
+});
+
+backBtn.addEventListener("click", () => {
+  if (currentScene > 1) showScene(currentScene - 1);
 });
 
 function showArrow(pulse = false) {
@@ -636,7 +682,7 @@ function onSceneEnter(n) {
   if (n === 4) runReveal();
   if (n === 5) renderPolaroidScene();
   if (n === 6) renderTodayScene();
-  if (n === 7) runTypewriter();
+  // if (n === 7) runTypewriter();  ← uncomment to re-enable the final note
 }
 
 /* ══════════════════════════════════════════════════
@@ -1040,9 +1086,26 @@ function triggerDL(blob, filename) {
    S6 — TODAY'S SKY
 ══════════════════════════════════════════════════ */
 async function renderTodayScene() {
-  const frame = document.getElementById("s6-frame");
-  const title = document.getElementById("s6-apod-title");
+  const frame     = document.getElementById("s6-frame");
+  const title     = document.getElementById("s6-apod-title");
+  const setupEl   = document.getElementById("s6-setup");
+  const headerEl  = document.getElementById("s6-header");
+  const frameWrap = document.getElementById("s6-frame-wrap");
+  const betterEl  = document.getElementById("s6-much-better");
+
+  // reset
+  setupEl.textContent    = "";
+  headerEl.style.opacity = "0";
+  frameWrap.style.opacity = "0";
+  betterEl.style.opacity = "0";
   frame.innerHTML = '<div class="spinner"></div>';
+
+  // Step 1: typewriter the setup line
+  const setupMsg = "not gonna lie, your actual birthday picture was kind of boring... so...";
+  await typewriterInto(setupEl, setupMsg, 38);
+
+  // Step 2: after a beat, fetch today's image in parallel
+  await new Promise(r => setTimeout(r, 700));
 
   try {
     if (!todayData) {
@@ -1050,10 +1113,8 @@ async function renderTodayScene() {
       if (!res.ok) throw new Error(res.status);
       todayData = await res.json();
     }
-
     frame.innerHTML   = "";
     title.textContent = todayData.title;
-
     if (todayData.media_type === "image") {
       const img = document.createElement("img");
       img.src = proxyUrl(todayData.url);
@@ -1065,17 +1126,33 @@ async function renderTodayScene() {
       iframe.allowFullscreen = true;
       frame.appendChild(iframe);
     }
-
   } catch {
     frame.innerHTML = `
       <p style="text-align:center;padding:2rem;color:var(--muted);font-size:0.8rem;">
-        <a href="https://apod.nasa.gov" target="_blank" style="color:var(--star);">
-          View on NASA ↗
-        </a>
+        <a href="https://apod.nasa.gov" target="_blank" style="color:var(--star);">View on NASA ↗</a>
       </p>`;
   }
 
-  setTimeout(() => showArrow(true), 1200);
+  // Step 3: fade in header + frame together
+  headerEl.style.opacity  = "1";
+  frameWrap.style.opacity = "1";
+
+  // Step 4: "much better." appears after a moment
+  setTimeout(() => { betterEl.style.opacity = "1"; }, 1400);
+}
+
+// helper: types text into an element, returns a promise when done
+function typewriterInto(el, text, speed = 35) {
+  return new Promise(resolve => {
+    let i = 0;
+    el.textContent = "";
+    function tick() {
+      if (i >= text.length) { resolve(); return; }
+      el.textContent += text[i++];
+      setTimeout(tick, speed + Math.random() * 18);
+    }
+    tick();
+  });
 }
 
 /* ══════════════════════════════════════════════════
